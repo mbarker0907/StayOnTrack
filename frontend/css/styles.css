@@ -49,3 +49,7 @@ ul {
 #add-task-btn:hover {
     background-color: #45a049;
 }
+
+.completed-task {
+    text-decoration: line-through;
+}
