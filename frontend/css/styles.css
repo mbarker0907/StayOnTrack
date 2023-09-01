@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f9fc;
+    margin: 0;
+    padding: 0;
+}
+
+header, footer {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+}
+
+section {
+    padding: 2em;
+    max-width: 800px;
+    margin: 0 auto; /* centering the content */
+}
+
+#tasks-section, #schedule-section {
+    margin-bottom: 2em;
+}
+
+h2 {
+    border-bottom: 2px solid #333;
+    padding-bottom: 0.5em;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#new-task-input {
+    padding: 0.5em;
+    width: 70%;
+    margin-right: 0.5em;
+}
+
+#add-task-btn {
+    padding: 0.5em 1em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#add-task-btn:hover {
+    background-color: #45a049;
+}
