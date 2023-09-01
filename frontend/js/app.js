@@ -6,12 +6,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const createTaskItem = (taskValue) => {
         const taskItemContainer = document.createElement('div');
         taskItemContainer.classList.add('task-item-container');
+        taskItemContainer.classList.add('task-added');  // Add this line for the animation when a task is added
 
         // Checkbox for completed task
         const taskCompleteCheckbox = document.createElement('input');
         taskCompleteCheckbox.type = 'checkbox';
         taskCompleteCheckbox.addEventListener('change', () => {
             taskItem.classList.toggle('completed-task', taskCompleteCheckbox.checked);
+            
+            // Check if task is marked as completed and apply animation
+            if (taskCompleteCheckbox.checked) {
+                taskItem.classList.add('task-completed');
+            } else {
+                taskItem.classList.remove('task-completed');
+            }
         });
         taskItemContainer.appendChild(taskCompleteCheckbox);
 
@@ -31,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Append to task list
         taskList.appendChild(taskItemContainer);
+
+         // Remove the .task-added class after the animation completes
+         setTimeout(() => {
+            taskItemContainer.classList.remove('task-added');
+        }, 600);  // 0.6s is the duration of the pulsate animation
     };
 
     const createConfirmationPrompt = (taskItemContainer) => {
