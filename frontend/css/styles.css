@@ -1,6 +1,6 @@
 /* Base Styles */
 body {
-    font-family: 'Permanent Marker', sans-serif;
+    font-family: 'Futura', sans-serif;
     font-size: 24px;
     margin: 0;
     padding: 0;
@@ -67,6 +67,7 @@ ul {
 
 /* Task Items */
 .task-item-container {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -78,6 +79,25 @@ ul {
     text-decoration: line-through;
     transform: scale(1.05);
     opacity: 0.7;
+}
+
+.task-completed::after {
+    content: url('./images/CoolGeo.png'); /* Replace with the actual path to your icon */
+    position: absolute; /* Position it according to the parent */
+    right: 10px; /* Adjust as needed */
+    top: 50%;
+    transform: translateY(-50%); /* Centers the icon vertically */
+    opacity: 0.5; /* Make it semi-visible when task is completed */
+    transition: opacity 1s ease-in-out;
+}
+
+.show-completion-symbol::after {
+    opacity: 1; /* Make the completion symbol fully visible */
+}
+
+
+.task-completed:hover::after {
+    opacity: 1; /* Fully visible on hover */
 }
 
 .delete-btn {

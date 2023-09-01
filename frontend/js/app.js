@@ -9,18 +9,25 @@ document.addEventListener('DOMContentLoaded', () => {
         taskItemContainer.classList.add('task-added');  // Add this line for the animation when a task is added
 
         // Checkbox for completed task
-        const taskCompleteCheckbox = document.createElement('input');
+    const taskCompleteCheckbox = document.createElement('input');
         taskCompleteCheckbox.type = 'checkbox';
         taskCompleteCheckbox.addEventListener('change', () => {
             taskItem.classList.toggle('completed-task', taskCompleteCheckbox.checked);
             
-            // Check if task is marked as completed and apply animation
-            if (taskCompleteCheckbox.checked) {
-                taskItem.classList.add('task-completed');
+            if(taskCompleteCheckbox.checked) {
+                taskItemContainer.classList.add('task-completed'); // Add the task-completed class to taskItemContainer
+                
+                // Display the completion symbol momentarily before fading
+                taskItemContainer.classList.add('show-completion-symbol');
+                setTimeout(() => {
+                    taskItemContainer.classList.remove('show-completion-symbol');
+                }, 2000); // Keeps the symbol visible for 2 seconds
             } else {
-                taskItem.classList.remove('task-completed');
+                taskItemContainer.classList.remove('task-completed'); // Remove the task-completed class if unchecked
             }
         });
+        
+
         taskItemContainer.appendChild(taskCompleteCheckbox);
 
         // The task itself
