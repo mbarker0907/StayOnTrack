@@ -1,49 +1,60 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    // Getting references to the elements
     const addTaskBtn = document.getElementById('add-task-btn');
     const newTaskInput = document.getElementById('new-task-input');
     const taskList = document.getElementById('task-list');
 
-    // Adding a click event listener to the add task button
+    const createConfirmationPrompt = (taskItem) => {
+        const promptDiv = document.createElement('div');
+        promptDiv.classList.add('confirmation-prompt');
+
+        const message = document.createElement('p');
+        message.innerText = "Are you sure you want to delete this task?";
+        promptDiv.appendChild(message);
+
+        const yesButton = document.createElement('button');
+        yesButton.innerText = "✔";
+        yesButton.classList.add('confirmation-btn');
+        yesButton.style.color = 'green';
+        yesButton.addEventListener('click', () => {
+            taskList.removeChild(taskItem);
+            document.body.removeChild(promptDiv);
+        });
+        promptDiv.appendChild(yesButton);
+
+        const noButton = document.createElement('button');
+        noButton.innerText = "✖";
+        noButton.classList.add('confirmation-btn');
+        noButton.style.color = 'red';
+        noButton.addEventListener('click', () => {
+            document.body.removeChild(promptDiv);
+        });
+        promptDiv.appendChild(noButton);
+
+        // Append the promptDiv to the body directly
+        document.body.appendChild(promptDiv);
+    };
+
     addTaskBtn.addEventListener('click', () => {
-        
-        // Getting and trimming the task input value
         const taskValue = newTaskInput.value.trim();
-        
-        // Checking if the task input value is not empty
-        if(taskValue) {
-            
-            // Creating a new list item element for the task
+
+        if (taskValue) {
+            const taskItemContainer = document.createElement('div');
+            taskItemContainer.classList.add('task-item-container');
+
             const taskItem = document.createElement('li');
-            
-            // Creating a checkbox input element
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            
-            // Adding an event listener to the checkbox to handle task completion
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    taskItem.classList.add('completed-task');
-                } else {
-                    taskItem.classList.remove('completed-task');
-                }
+            taskItem.innerText = taskValue;
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerText = "x";
+            deleteBtn.classList.add('delete-btn');
+            deleteBtn.addEventListener('click', () => {
+                createConfirmationPrompt(taskItemContainer);
             });
 
-            // Appending the checkbox to the task item
-            taskItem.appendChild(checkbox);
-            
-            // Creating a span to hold the task text
-            const taskText = document.createElement('span');
-            taskText.innerText = ` ${taskValue}`;
+            taskItemContainer.appendChild(taskItem);
+            taskItemContainer.appendChild(deleteBtn);
+            taskList.appendChild(taskItemContainer);
 
-            // Appending the task text to the task item
-            taskItem.appendChild(taskText);
-            
-            // Appending the task item to the task list
-            taskList.appendChild(taskItem);
-            
-            // Clearing the input field for the next task
             newTaskInput.value = ''; 
         }
     });

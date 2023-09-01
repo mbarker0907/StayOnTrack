@@ -53,3 +53,45 @@ ul {
 .completed-task {
     text-decoration: line-through;
 }
+
+.delete-btn {
+    background-color: lightgrey;
+    color: red;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.task-item-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.confirmation-prompt {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 1em;
+    border: 1px solid #ccc;
+    z-index: 1000; /* Ensure it's on top */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    text-align: center;
+}
+
+.confirmation-btn {
+    margin: 0.5em;
+    padding: 0.5em 1em;
+    border: none;
+    cursor: pointer;
+}
+
+/* You can add more styles for the .confirmation-btn if needed */
+
+
