@@ -69,11 +69,22 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(promptDiv);
     };
 
-    addTaskBtn.addEventListener('click', () => {
+    // Function that contains the steps to add a task
+    function addTask() {
         const taskValue = newTaskInput.value.trim();
         if (taskValue) {
             createTaskItem(taskValue);
-            newTaskInput.value = ''; 
+            newTaskInput.value = ''; // Clear the input after adding
+        }
+    }
+
+    // When the button is clicked, just call the function
+    addTaskBtn.addEventListener('click', addTask);
+
+    // When the "Enter" key is pressed in the input field, also call the function
+    newTaskInput.addEventListener('keydown', (event) => {
+        if (event.key === "Enter" || event.keyCode === 13) {
+            addTask();
         }
     });
 });
