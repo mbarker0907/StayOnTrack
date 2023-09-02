@@ -4,6 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const newTaskInput = document.getElementById('new-task-input');
     const taskList = document.getElementById('task-list');
 
+    // Fetch tasks from the server and populate the task list
+function fetchTasks() {
+    fetch('http://127.0.0.1:5000/tasks')
+    .then(response => response.json())
+    .then(tasks => {
+        tasks.forEach(task => createTaskItem(task));
+    });
+}
+
+// Call the fetchTasks function on page load
+fetchTasks();
+
     // Function to create individual task items
     const createTaskItem = (taskValue) => {
         // Task container
@@ -82,14 +94,27 @@ document.addEventListener('DOMContentLoaded', () => {
         return button;
     }
 
-    // Function to add a task
     function addTask() {
         const taskValue = newTaskInput.value.trim();
         if (taskValue) {
-            createTaskItem(taskValue);
-            newTaskInput.value = ''; // Clear the input
+            fetch('http://127.0.0.1:5000/add-task', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ description: taskValue })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Task added successfully!") {
+                    createTaskItem(taskValue);
+                    newTaskInput.value = '';  // Clear the input
+                }
+            });
         }
     }
+    
+    
 
     // Event listeners for adding tasks
     addTaskBtn.addEventListener('click', addTask);
