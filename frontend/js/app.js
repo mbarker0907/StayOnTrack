@@ -15,17 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
             taskItem.classList.toggle('completed-task', taskCompleteCheckbox.checked);
             
             if(taskCompleteCheckbox.checked) {
-                taskItemContainer.classList.add('task-completed'); // Add the task-completed class to taskItemContainer
+                taskItemContainer.classList.add('task-completed');
                 
-                // Display the completion symbol momentarily before fading
-                taskItemContainer.classList.add('show-completion-symbol');
                 setTimeout(() => {
-                    taskItemContainer.classList.remove('show-completion-symbol');
-                }, 2000); // Keeps the symbol visible for 2 seconds
+                    taskItemContainer.classList.remove('task-completed');
+                }, 3000); // 3 seconds to allow for the dissolve and blowAway animations to finish
             } else {
-                taskItemContainer.classList.remove('task-completed'); // Remove the task-completed class if unchecked
+                taskItemContainer.classList.remove('task-completed');
             }
         });
+        
         
 
         taskItemContainer.appendChild(taskCompleteCheckbox);

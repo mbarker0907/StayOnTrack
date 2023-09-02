@@ -1,10 +1,13 @@
+/* Import the Cinzel and Philosopher fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Philosopher&display=swap');
+
 /* Base Styles */
 body {
-    font-family: 'Futura', sans-serif;
+    font-family: 'Philosopher', sans-serif;
     font-size: 24px;
     margin: 0;
     padding: 0;
-    background-color: white;
+    background-color: #3D59AB; /* Dark Sky Blue */
 }
 
 body::after {
@@ -24,11 +27,12 @@ body::after {
 }
 
 header, footer {
-    background-color: #77815c;
-    opacity: .6;
-    color: white;
+    background-color: #E0FFFF; /* Light Cyan */
+    opacity: .8;
+    color: #3D59AB; 
     text-align: center;
     padding: 1em 0;
+    font-family: 'Cinzel', serif; 
 }
 
 section {
@@ -38,8 +42,10 @@ section {
 }
 
 h2 {
-    border-bottom: 2px solid #333;
+    color: white;
+    border-bottom: 2px solid #FFF1C1; /* Pale gold for the border */
     padding-bottom: 0.5em;
+    font-family: 'Cinzel', serif; /* Use Cinzel for h2 headers */
 }
 
 ul {
@@ -61,13 +67,13 @@ ul {
 }
 
 #add-task-btn:hover, .delete-btn:hover, .confirmation-btn:hover {
-    box-shadow: 0px 5px 15px rgba(58, 128, 58, 0.6), 0 0 15px rgba(58, 128, 58, 0.5);
+    box-shadow: 0px 5px 15px rgba(255, 215, 0, 0.6), 0 0 15px rgba(255, 215, 0, 0.5); /* Gold shadow for hover */
     transform: translateY(-2px);
 }
 
 /* Task Items */
 .task-item-container {
-    position: relative;
+    color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -76,28 +82,44 @@ ul {
 }
 
 .completed-task {
+    color: #FFF1C1; /* Pale gold for completed tasks */
     text-decoration: line-through;
     transform: scale(1.05);
     opacity: 0.7;
 }
 
 .task-completed::after {
-    content: url('./images/CoolGeo.png'); /* Replace with the actual path to your icon */
-    position: absolute; /* Position it according to the parent */
-    right: 10px; /* Adjust as needed */
+    content: url('./images/CoolGeo.png');
+    position: fixed;
+    left: 50%;
     top: 50%;
-    transform: translateY(-50%); /* Centers the icon vertically */
-    opacity: 0.5; /* Make it semi-visible when task is completed */
+    transform: translate(-50%, -50%);
+    opacity: 0.5;
     transition: opacity 1s ease-in-out;
+    z-index: 10;
+    animation: dissolve 2s forwards, blowAway 2s 1s forwards; /* Add these animations */
 }
 
+@keyframes dissolve {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes blowAway {
+    0% { transform: translate(-50%, -50%); }
+    100% { transform: translate(-80%, -150%); }
+}
+
+
+
 .show-completion-symbol::after {
-    opacity: 1; /* Make the completion symbol fully visible */
+    animation: blowAway 2s forwards; /* Apply the blowing away animation */
+    opacity: 1;
 }
 
 
 .task-completed:hover::after {
-    opacity: 1; /* Fully visible on hover */
+    opacity: 1;
 }
 
 .delete-btn {
@@ -136,7 +158,7 @@ ul {
 @keyframes slideFadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px); /* Reduced slide effect */
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
@@ -151,21 +173,35 @@ ul {
     }
     to {
         opacity: 0;
-        transform: translateY(10px); /* Reduced slide effect */
+        transform: translateY(10px);
     }
 }
 
 @keyframes pulsate {
     0% { transform: scale(1); }
-    50% { transform: scale(1.03); } /* Subtle pulsate */
+    50% { transform: scale(1.03); }
     100% { transform: scale(1); }
 }
 
+/* Keyframes for scaling and rotating */
+@keyframes scaleRotate {
+    0% { transform: translate(-50%, -50%); }
+    50% { transform: translate(-50%, -50%) scale(1.1) rotate(10deg); }
+    100% { transform: translate(-50%, -50%) scale(0.9) rotate(-10deg); }
+}
+
+/* Keyframes for blowing away */
+@keyframes blowAway {
+    to {
+        transform: translate(-150%, -150%) scale(0.2) rotate(30deg);
+        opacity: 0;
+    }
+}
+
 .task-added, .task-completed {
-    animation: pulsate 1s ease-in-out; /* Increased duration */
+    animation: pulsate 1s ease-in-out;
 }
 
 .task-item-container {
-    animation: slideFadeIn 0.8s ease-in-out; /* Adjusted duration and timing */
+    animation: slideFadeIn 0.8s ease-in-out;
 }
-
