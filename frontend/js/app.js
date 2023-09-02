@@ -1,57 +1,54 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // DOM elements
     const addTaskBtn = document.getElementById('add-task-btn');
     const newTaskInput = document.getElementById('new-task-input');
     const taskList = document.getElementById('task-list');
 
+    // Function to create individual task items
     const createTaskItem = (taskValue) => {
+        // Task container
         const taskItemContainer = document.createElement('div');
-        taskItemContainer.classList.add('task-item-container');
-        taskItemContainer.classList.add('task-added');  // Add this line for the animation when a task is added
+        taskItemContainer.classList.add('task-item-container', 'task-added');
 
-        // Checkbox for completed task
-    const taskCompleteCheckbox = document.createElement('input');
+        // Checkbox for marking a task as completed
+        const taskCompleteCheckbox = document.createElement('input');
         taskCompleteCheckbox.type = 'checkbox';
-        taskCompleteCheckbox.addEventListener('change', () => {
-            taskItem.classList.toggle('completed-task', taskCompleteCheckbox.checked);
-            
-            if(taskCompleteCheckbox.checked) {
-                taskItemContainer.classList.add('task-completed');
-                
-                setTimeout(() => {
-                    taskItemContainer.classList.remove('task-completed');
-                }, 3000); // 3 seconds to allow for the dissolve and blowAway animations to finish
-            } else {
-                taskItemContainer.classList.remove('task-completed');
-            }
-        });
-        
-        
-
+        taskCompleteCheckbox.addEventListener('change', handleTaskCompletion);
         taskItemContainer.appendChild(taskCompleteCheckbox);
 
-        // The task itself
+        // Task item
         const taskItem = document.createElement('li');
         taskItem.innerText = taskValue;
         taskItemContainer.appendChild(taskItem);
 
-        // Delete button
+        // Delete task button
         const deleteBtn = document.createElement('button');
         deleteBtn.innerText = "x";
         deleteBtn.classList.add('delete-btn');
-        deleteBtn.addEventListener('click', () => {
-            createConfirmationPrompt(taskItemContainer);
-        });
+        deleteBtn.addEventListener('click', () => createConfirmationPrompt(taskItemContainer));
         taskItemContainer.appendChild(deleteBtn);
 
-        // Append to task list
+        // Append the complete task item to the task list
         taskList.appendChild(taskItemContainer);
 
-         // Remove the .task-added class after the animation completes
-         setTimeout(() => {
-            taskItemContainer.classList.remove('task-added');
-        }, 600);  // 0.6s is the duration of the pulsate animation
+        // Animation handling for newly added task
+        setTimeout(() => taskItemContainer.classList.remove('task-added'), 600);
     };
 
+    // Function to handle task completion animation and logic
+    function handleTaskCompletion() {
+        const taskItem = this.nextElementSibling;
+        taskItem.classList.toggle('completed-task', this.checked);
+        
+        if (this.checked) {
+            this.parentElement.classList.add('task-completed');
+            setTimeout(() => this.parentElement.classList.remove('task-completed'), 3000);
+        } else {
+            this.parentElement.classList.remove('task-completed');
+        }
+    }
+
+    // Confirmation prompt for task deletion
     const createConfirmationPrompt = (taskItemContainer) => {
         const promptDiv = document.createElement('div');
         promptDiv.classList.add('confirmation-prompt');
@@ -61,46 +58,41 @@ document.addEventListener('DOMContentLoaded', () => {
         promptDiv.appendChild(message);
 
         // Yes button
-        const yesButton = document.createElement('button');
-        yesButton.innerText = "✔";
-        yesButton.classList.add('confirmation-btn');
-        yesButton.style.color = 'green';
-        yesButton.addEventListener('click', () => {
+        const yesButton = createPromptButton('✔', 'green', () => {
             taskItemContainer.style.animation = "slideFadeOut 0.5s forwards";
-            setTimeout(() => {
-                taskList.removeChild(taskItemContainer);
-            }, 500); 
+            setTimeout(() => taskList.removeChild(taskItemContainer), 500); 
             document.body.removeChild(promptDiv);
         });
         promptDiv.appendChild(yesButton);
 
         // No button
-        const noButton = document.createElement('button');
-        noButton.innerText = "✖";
-        noButton.classList.add('confirmation-btn');
-        noButton.style.color = 'red';
-        noButton.addEventListener('click', () => {
-            document.body.removeChild(promptDiv);
-        });
+        const noButton = createPromptButton('✖', 'red', () => document.body.removeChild(promptDiv));
         promptDiv.appendChild(noButton);
 
-        // Append the prompt to the body
         document.body.appendChild(promptDiv);
     };
 
-    // Function that contains the steps to add a task
+    // Utility function to create prompt buttons (Yes/No)
+    function createPromptButton(text, color, onClick) {
+        const button = document.createElement('button');
+        button.innerText = text;
+        button.classList.add('confirmation-btn');
+        button.style.color = color;
+        button.addEventListener('click', onClick);
+        return button;
+    }
+
+    // Function to add a task
     function addTask() {
         const taskValue = newTaskInput.value.trim();
         if (taskValue) {
             createTaskItem(taskValue);
-            newTaskInput.value = ''; // Clear the input after adding
+            newTaskInput.value = ''; // Clear the input
         }
     }
 
-    // When the button is clicked, just call the function
+    // Event listeners for adding tasks
     addTaskBtn.addEventListener('click', addTask);
-
-    // When the "Enter" key is pressed in the input field, also call the function
     newTaskInput.addEventListener('keydown', (event) => {
         if (event.key === "Enter" || event.keyCode === 13) {
             addTask();

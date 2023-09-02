@@ -1,50 +1,49 @@
-/* Import the Cinzel and Philosopher fonts from Google Fonts */
+/* ====== IMPORTS AND BASE STYLES ====== */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Philosopher&display=swap');
 
-/* Base Styles */
 body {
-    font-family: 'Philosopher', sans-serif;
-    font-size: 24px;
     margin: 0;
     padding: 0;
+    font-size: 24px;
+    font-family: 'Philosopher', sans-serif;
     background-color: #3D59AB; /* Dark Sky Blue */
 }
 
 body::after {
     content: "";
     position: fixed;
+    z-index: -1;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: -1;
     background-image: url("./images/FlowerOfLife.png");
     background-size: 170px 170px;
-    background-position: center center;
     background-repeat: repeat;
+    background-position: center center;
     background-blend-mode: multiply;
     opacity: 0.7;
 }
 
 header, footer {
+    padding: 1em 0;
+    text-align: center;
+    color: #3D59AB; 
     background-color: #E0FFFF; /* Light Cyan */
     opacity: .8;
-    color: #3D59AB; 
-    text-align: center;
-    padding: 1em 0;
     font-family: 'Cinzel', serif; 
 }
 
 section {
     padding: 2em;
-    max-width: 800px;
     margin: 0 auto;
+    max-width: 800px;
 }
 
 h2 {
+    padding-bottom: 0.5em;
     color: white;
     border-bottom: 2px solid #FFF1C1; /* Pale gold for the border */
-    padding-bottom: 0.5em;
     font-family: 'Cinzel', serif; /* Use Cinzel for h2 headers */
 }
 
@@ -53,7 +52,7 @@ ul {
     padding: 0;
 }
 
-/* Input and Buttons */
+/* ====== INPUT AND BUTTON STYLES ====== */
 #new-task-input {
     padding: 0.5em;
     width: 70%;
@@ -61,8 +60,8 @@ ul {
 }
 
 #add-task-btn, .delete-btn, .confirmation-btn {
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 }
 
@@ -71,13 +70,13 @@ ul {
     transform: translateY(-2px);
 }
 
-/* Task Items */
+/* ====== TASK ITEM STYLES ====== */
 .task-item-container {
+    margin-bottom: 10px;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
     animation: slideFadeIn 0.5s ease-out;
 }
 
@@ -91,59 +90,46 @@ ul {
 .task-completed::after {
     content: url('./images/RainbowFlower.png');
     position: fixed;
-    left: 50%;
+    z-index: 10;
     top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%) scale(.25);
     opacity: 0.5;
     transition: opacity 1s ease-in-out;
-    z-index: 10;
-    animation: dissolve 2s forwards, blowAway 2s 1s forwards; /* Add these animations */
+    animation: dissolve 2s forwards, blowAway 2s 1s forwards; 
 }
-
-@keyframes dissolve {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
-}
-
-@keyframes blowAway {
-    0% { transform: translate(-50%, -50%); }
-    100% { transform: translate(-80%, -150%); }
-}
-
-
 
 .show-completion-symbol::after {
-    animation: blowAway 2s forwards; /* Apply the blowing away animation */
+    animation: blowAway 2s forwards;
     opacity: 1;
 }
-
 
 .task-completed:hover::after {
     opacity: 1;
 }
 
 .delete-btn {
-    background-color: lightgrey;
+    margin-left: 10px;
+    padding: 5px;
     color: red;
+    background-color: lightgrey;
     border: none;
     cursor: pointer;
-    padding: 5px;
     display: inline-block;
-    margin-left: 10px;
 }
 
-/* Confirmation Prompt */
+/* ====== CONFIRMATION PROMPT STYLES ====== */
 .confirmation-prompt {
     position: fixed;
+    z-index: 1000;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff;
     padding: 1em;
-    border: 1px solid #ccc;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     max-width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
 
@@ -154,27 +140,19 @@ ul {
     cursor: pointer;
 }
 
-/* Animations */
+/* ====== ANIMATIONS ====== */
 @keyframes slideFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slideFadeOut {
-    from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateY(10px);
-    }
+@keyframes dissolve {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes blowAway {
+    to { transform: translate(-150%, -150%) scale(0.2) rotate(30deg); opacity: 0; }
 }
 
 @keyframes pulsate {
@@ -183,25 +161,6 @@ ul {
     100% { transform: scale(1); }
 }
 
-/* Keyframes for scaling and rotating */
-@keyframes scaleRotate {
-    0% { transform: translate(-50%, -50%); }
-    50% { transform: translate(-50%, -50%) scale(1.1) rotate(10deg); }
-    100% { transform: translate(-50%, -50%) scale(0.9) rotate(-10deg); }
-}
-
-/* Keyframes for blowing away */
-@keyframes blowAway {
-    to {
-        transform: translate(-150%, -150%) scale(0.2) rotate(30deg);
-        opacity: 0;
-    }
-}
-
 .task-added, .task-completed {
     animation: pulsate 1s ease-in-out;
-}
-
-.task-item-container {
-    animation: slideFadeIn 0.8s ease-in-out;
 }
