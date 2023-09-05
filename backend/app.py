@@ -9,9 +9,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
 
+# ===================== DATABASE MODEL ======================
+
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(200), nullable=False)
+
+# ======================== ROUTES ===========================
 
 @app.route('/')
 def home():
@@ -20,7 +24,7 @@ def home():
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
     tasks = Task.query.all()
-    return jsonify([task.description for task in tasks])
+    return jsonify([{'id': task.id, 'description': task.description} for task in tasks])
 
 @app.route('/add-task', methods=['POST'])
 def add_task():
@@ -34,7 +38,21 @@ def add_task():
     db.session.add(new_task)
     db.session.commit()
 
-    return jsonify({"message": "Task added successfully!"})
+    return jsonify({'id': new_task.id, 'description': new_task.description, 'message': "Task added successfully!"})
+
+@app.route('/delete-task/<int:task_id>', methods=['DELETE'])
+def delete_task(task_id):
+    task = Task.query.get(task_id)
+    
+    if not task:
+        return jsonify({"message": "Task not found!"}), 404
+
+    db.session.delete(task)
+    db.session.commit()
+
+    return jsonify({"message": "Task deleted successfully!"})
+
+# ========================= MAIN ============================
 
 if __name__ == '__main__':
     with app.app_context():

@@ -1,57 +1,59 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM elements
+
+    // ======================== DOM Elements ======================== 
     const addTaskBtn = document.getElementById('add-task-btn');
     const newTaskInput = document.getElementById('new-task-input');
     const taskList = document.getElementById('task-list');
 
-    // Fetch tasks from the server and populate the task list
-function fetchTasks() {
-    fetch('http://127.0.0.1:5000/tasks')
-    .then(response => response.json())
-    .then(tasks => {
-        tasks.forEach(task => createTaskItem(task));
-    });
-}
+    // ======================= API Functions ========================
+    function fetchTasks() {
+        fetch('http://127.0.0.1:5000/tasks')
+        .then(response => response.json())
+        .then(tasks => {
+            tasks.forEach(task => createTaskItem(task.id, task.description));
+        });
+    }
 
-// Call the fetchTasks function on page load
-fetchTasks();
+    function deleteTask(taskId) {
+        fetch(`http://127.0.0.1:5000/delete-task/${taskId}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "Task deleted successfully!") {
+                // Task is already removed from the frontend upon confirmation
+            }
+        });
+    }
 
-    // Function to create individual task items
-    const createTaskItem = (taskValue) => {
-        // Task container
+    // ======================== UI Functions ======================== 
+    const createTaskItem = (taskId, taskDescription) => {
         const taskItemContainer = document.createElement('div');
         taskItemContainer.classList.add('task-item-container', 'task-added');
 
-        // Checkbox for marking a task as completed
         const taskCompleteCheckbox = document.createElement('input');
         taskCompleteCheckbox.type = 'checkbox';
         taskCompleteCheckbox.addEventListener('change', handleTaskCompletion);
         taskItemContainer.appendChild(taskCompleteCheckbox);
 
-        // Task item
         const taskItem = document.createElement('li');
-        taskItem.innerText = taskValue;
+        taskItem.innerText = taskDescription;
         taskItemContainer.appendChild(taskItem);
 
-        // Delete task button
         const deleteBtn = document.createElement('button');
         deleteBtn.innerText = "x";
         deleteBtn.classList.add('delete-btn');
-        deleteBtn.addEventListener('click', () => createConfirmationPrompt(taskItemContainer));
+        deleteBtn.addEventListener('click', () => createConfirmationPrompt(taskItemContainer, taskId));
         taskItemContainer.appendChild(deleteBtn);
 
-        // Append the complete task item to the task list
         taskList.appendChild(taskItemContainer);
-
-        // Animation handling for newly added task
         setTimeout(() => taskItemContainer.classList.remove('task-added'), 600);
     };
 
-    // Function to handle task completion animation and logic
     function handleTaskCompletion() {
         const taskItem = this.nextElementSibling;
         taskItem.classList.toggle('completed-task', this.checked);
-        
+
         if (this.checked) {
             this.parentElement.classList.add('task-completed');
             setTimeout(() => this.parentElement.classList.remove('task-completed'), 3000);
@@ -60,8 +62,7 @@ fetchTasks();
         }
     }
 
-    // Confirmation prompt for task deletion
-    const createConfirmationPrompt = (taskItemContainer) => {
+    const createConfirmationPrompt = (taskItemContainer, taskId) => {
         const promptDiv = document.createElement('div');
         promptDiv.classList.add('confirmation-prompt');
 
@@ -69,22 +70,20 @@ fetchTasks();
         message.innerText = "Are you sure you want to delete this task?";
         promptDiv.appendChild(message);
 
-        // Yes button
         const yesButton = createPromptButton('✔', 'green', () => {
             taskItemContainer.style.animation = "slideFadeOut 0.5s forwards";
-            setTimeout(() => taskList.removeChild(taskItemContainer), 500); 
+            setTimeout(() => taskList.removeChild(taskItemContainer), 500);
+            deleteTask(taskId);
             document.body.removeChild(promptDiv);
         });
         promptDiv.appendChild(yesButton);
 
-        // No button
         const noButton = createPromptButton('✖', 'red', () => document.body.removeChild(promptDiv));
         promptDiv.appendChild(noButton);
 
         document.body.appendChild(promptDiv);
     };
 
-    // Utility function to create prompt buttons (Yes/No)
     function createPromptButton(text, color, onClick) {
         const button = document.createElement('button');
         button.innerText = text;
@@ -107,20 +106,20 @@ fetchTasks();
             .then(response => response.json())
             .then(data => {
                 if (data.message === "Task added successfully!") {
-                    createTaskItem(taskValue);
+                    createTaskItem(data.id, data.description); // Use returned ID from the response
                     newTaskInput.value = '';  // Clear the input
                 }
             });
         }
     }
     
-    
-
-    // Event listeners for adding tasks
+    // ======================= Event Listeners ====================== 
     addTaskBtn.addEventListener('click', addTask);
     newTaskInput.addEventListener('keydown', (event) => {
         if (event.key === "Enter" || event.keyCode === 13) {
             addTask();
         }
     });
+
+    fetchTasks();
 });
